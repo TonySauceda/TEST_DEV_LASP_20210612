@@ -1,0 +1,51 @@
+﻿@model Toka.Core.Models.PersonasFisicas
+
+@{
+    ViewData["Title"] = "Personas";
+}
+
+<div id="divPersonas">
+    <div class="toast" style="position: absolute; z-index: 100; width: 300px; margin-left: -150px; left: 50%" data-delay="2000">
+        <div class="toast-header bg-success text-white">
+            <strong class="mr-auto">Alerta</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-auto">
+            <a class="btn btn-primary" asp-area="" asp-controller="Personas" asp-action="Nuevo">Agregar registro</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="tabla" class="col-12">
+            <partial name="@Toka.WebApp.Utils.CONSTANTES.VISTA_PARCIAL_TABLA_PERSONAS" />
+        </div>
+    </div>
+
+    <script>
+        async function obtenerPersonas() {
+            const url = "@(Url.Action("ObtenerPersonas"))";
+
+            let response = await fetch(url);
+
+            var vista = await response.text();
+            const tabla = document.querySelector("#divPersonas #tabla");
+            tabla.innerHTML = vista;
+        }
+
+        obtenerPersonas();
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var mensaje = "@ViewBag.Mensaje";
+            if (mensaje != null && mensaje != "") {
+                $(".toast-body").html(mensaje);
+                $('.toast').toast('show')
+            }
+        });
+
+    </script>
+</div>

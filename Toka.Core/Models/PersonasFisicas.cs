@@ -19,7 +19,7 @@ namespace Toka.Core.Models
         public DateTime FechaRegistro { get; set; }
         [Display(Name = "Fecha de actualización")]
         public DateTime? FechaActualizacion { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El nombre es requerido")]
         [StringLength(50, ErrorMessage = "El nombre no puede ser mayor a 50 caracteres")]
         public string Nombre { get; set; }
         [StringLength(50, ErrorMessage = "El apellido paterno no puede ser mayor a 50 caracteres")]
@@ -28,17 +28,19 @@ namespace Toka.Core.Models
         [StringLength(50, ErrorMessage = "El apellido materno no puede ser mayor a 50 caracteres")]
         [Display(Name = "Apellido materno")]
         public string ApellidoMaterno { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El RFC es requerido")]
         [ValdarRFC]
         public string RFC { get; set; }
         [Display(Name = "Fecha de nacimiento")]
-        public DateTime? FechaNacimiento { get; set; }
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "La fecha de nacimiento es requerida")]
+        public DateTime FechaNacimiento { get; set; }
         public int? UsuarioAgrega { get; set; }
         public bool Activo { get; set; }
 
         public bool ValidarRFC()
         {
-            return RFC.Length == 13;
+            return (RFC ?? "").Length == 13;
         }
     }
 }

@@ -8,7 +8,7 @@ using Toka.Core.Models;
 
 namespace Toka.Core.ValidationAttributes
 {
-    public class ValdarRFCAttribute : ValidationAttribute
+    internal class ValdarRFCAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {

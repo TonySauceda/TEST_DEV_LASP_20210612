@@ -62,7 +62,7 @@ namespace Toka.WebApi.Controllers
                 model.IdPersonaFisica = id;
 
             if (model.IdPersonaFisica != id)
-                return BadRequest();
+                return BadRequest(new Resultado() { Error = -1, MensajeError = "Error al procesar la información" });
 
             var parms = ObtenerParametros(model, true);
             string query = "EXEC dbo.sp_ActualizarPersonaFisica @IdPersonaFisica,@Nombre,@ApellidoPaterno,@ApellidoMaterno,@RFC,@FechaNacimiento,@UsuarioAgrega";
