@@ -5,12 +5,30 @@ using System.Threading.Tasks;
 
 namespace Toka.WebApp.Utils
 {
-    public class CONSTANTES
+    public class Constantes
     {
-        public const string URL_BASE_TOKA_WEB_API = "https://localhost:44397/api/";
+        public class TokaWebApi
+        {
+            public const string Base = "https://localhost:44397/api";
+            public static readonly string PersonasFisicas = $"{Base}/PersonasFisicas";
+            //public const string TokaCandidatoApi = "https://api.toka.com.mx/candidato/api";
+        }
+        public class CandidatoApi
+        {
+            public const string Base = "https://api.toka.com.mx/candidato/api";
+            public static readonly string Authenticate = $"{Base}/login/authenticate";
+            public static readonly string Customers = $"{Base}/customers";
+        }
 
-        public const int PAGINACION_NUMERO_REGISTROS = 10;
+        public class Paginacion
+        {
+            public const int NumeroRegistros = 20;
+        }
 
-        public const string VISTA_PARCIAL_TABLA_PERSONAS = "~/Views/Shared/_TablaPersonasPartial.cshtml";
+        public class VistaParcial
+        {
+            public const string TablaPersonas = "~/Views/Shared/_TablaPersonasPartial.cshtml";
+            public const string TablaReporte = "~/Views/Shared/_TablaReportePartial.cshtml";
+        }
     }
 }

@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Reporte";
+}
+
+<div id="divReporte">
+    <div class="row">
+        <div id="tabla" class="col-12">
+            <partial name="@Toka.WebApp.Utils.Constantes.VistaParcial.TablaReporte" />
+        </div>
+    </div>
+
+    <script>
+        async function obtenerReporte(pagina, limpiarBody) {
+            if (limpiarBody) {
+                const bodyTabla = document.querySelector("#divReporte #tabla tbody");
+                bodyTabla.innerHTML = '<tr><td class="text-center" colspan="100"><div class="spinner-border" role="status"><span class="sr-only">Cargando registros...</span></div></td></tr>';
+            }
+
+
+            let url = "@(Url.Action("ObtenerReporte", "Reporte", new { pagina = "PARAM_PAGINA" }))";
+
+            url = url.replace("PARAM_PAGINA", pagina);
+            let response = await fetch(url);
+
+            var vista = await response.text();
+            const tabla = document.querySelector("#divReporte #tabla");
+            tabla.innerHTML = vista;
+        }
+
+        obtenerReporte(1, false);
+
+        document.addEventListener('click', function (e) {
+            e = e || window.event;
+
+            if (e.target.getAttribute("name") =="btn_pagina") {
+                const el = $(e.target)
+                if (!$(el).hasClass("disabled")) {
+                    obtenerReporte($(el).attr("data-pagina"), true);
+                }
+            }
+        }, false);
+
+        document.addEventListener('change', function (e) {
+            e = e || window.event;
+
+            if (e.target.getAttribute("name") =="cmb_pagina") {
+                const el = $(e.target)
+                obtenerReporte($(el).val(), true);
+            }
+        }, false);
+    </script>
+</div>

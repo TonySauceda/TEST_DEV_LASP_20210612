@@ -1,0 +1,91 @@
+﻿@model Toka.WebApp.Models.CustomersResponse
+
+@{
+    Layout = "";
+}
+
+<table class="table w-100 table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().IdCliente)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().FechaRegistroEmpresa)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().RazonSocial)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().RFC)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().Sucursal)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().IdEmpleado)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().Nombre)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().Paterno)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().Materno)</th>
+            <th>@Html.DisplayNameFor(m => m.Data.FirstOrDefault().IdViaje)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null)
+        {
+            <tr>
+                <td class="text-center" colspan="100">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Cargando registros...</span>
+                    </div>
+                </td>
+            </tr>
+        }
+        else if (Model.Data.Count == 0)
+        {
+            <tr>
+                <td class="text-center" colspan="100">
+                    <span>No se encontraron registros</span>
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var reporte in Model.Data)
+            {
+                <tr>
+                    <td>@reporte.IdCliente</td>
+                    <td>@reporte.FechaRegistroEmpresa</td>
+                    <td>@reporte.RazonSocial</td>
+                    <td>@reporte.RFC</td>
+                    <td>@reporte.Sucursal</td>
+                    <td>@reporte.IdEmpleado</td>
+                    <td>@reporte.Nombre</td>
+                    <td>@reporte.Paterno</td>
+                    <td>@reporte.Materno</td>
+                    <td>@reporte.IdViaje</td>
+                </tr>
+            }
+        }
+    </tbody>
+    @if (Model != null && Model.Paginacion)
+    {
+        int pInicio = (Model.PaginaActual - 1) * Model.RegistrosPorPagina + 1;
+        int pFin = Model.PaginaActual == Model.TotalPaginas ? Model.TotalRegistros : (Model.PaginaActual - 1) * Model.RegistrosPorPagina + Model.RegistrosPorPagina;
+
+        <tfoot>
+            <tr>
+                <td class="text-center" colspan="100">
+                    <div class="row">
+                        <div class="col-auto d-flex">
+                            <span class="align-self-center">@($"{pInicio} al {pFin} de un total de {Model.TotalRegistros} registros")</span>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <button type="button" name="btn_pagina" class="btn btn-outline-primary mx-1 rounded-0 @(Model.PaginaActual == 1 ? "disabled" : "")" data-pagina="1">Inicio</button>
+                            <button type="button" name="btn_pagina" class="btn btn-outline-primary mx-1 rounded-0 @(Model.PaginaActual == 1 ? "disabled" : "")" data-pagina="@(Model.PaginaActual - 1)">Anterior</button>
+                            <span class="align-self-center mx-1">Página:</span>
+                            <select class="form-control w-auto" name="cmb_pagina">
+                                @for (int i = 1; i <= Model.TotalPaginas; i++)
+                                {
+                                    string selected = Model.PaginaActual == i ? " selected" : "";
+                                    @Html.Raw($"<option value='{i}'{selected}>{i}</option>")
+                                }
+                            </select>
+                            <button type="button" name="btn_pagina" class="btn btn-outline-primary mx-1 rounded-0 @(Model.PaginaActual == Model.TotalPaginas ? "disabled" : "")" data-pagina="@(Model.PaginaActual + 1)">Siguiente</button>
+                            <button type="button" name="btn_pagina" class="btn btn-outline-primary mx-1 rounded-0 @(Model.PaginaActual == Model.TotalPaginas ? "disabled" : "")" data-pagina="@(Model.TotalPaginas)">Fin</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>

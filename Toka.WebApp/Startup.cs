@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Toka.WebApp.Configuration;
 
 namespace Toka.WebApp
 {
@@ -23,6 +24,11 @@ namespace Toka.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var candidatoApiSettings = new CandidatoApiSettings();
+            Configuration.Bind(nameof(candidatoApiSettings), candidatoApiSettings);
+
+            services.AddSingleton(candidatoApiSettings);
+
             services.AddControllersWithViews();
         }
 

@@ -13,7 +13,6 @@ namespace Toka.WebApp.Controllers
 {
     public class PersonasController : Controller
     {
-        public const string ACCION_WEB_API = "PersonasFisicas";
         public IActionResult Index()
         {
             ViewBag.Mensaje = TempData["Mensaje"];
@@ -35,7 +34,7 @@ namespace Toka.WebApp.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.PostAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}", new JsonContent(modelo)))
+                using (var response = await httpClient.PostAsync($"{Constantes.TokaWebApi.PersonasFisicas}", new JsonContent(modelo)))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode != System.Net.HttpStatusCode.Created)
@@ -58,7 +57,7 @@ namespace Toka.WebApp.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}/{id}"))
+                using (var response = await httpClient.GetAsync($"{Constantes.TokaWebApi.PersonasFisicas}/{id}"))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -75,7 +74,7 @@ namespace Toka.WebApp.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}/{id}"))
+                using (var response = await httpClient.GetAsync($"{Constantes.TokaWebApi.PersonasFisicas}/{id}"))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -94,7 +93,7 @@ namespace Toka.WebApp.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.PutAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}/{modelo.IdPersonaFisica}", new JsonContent(modelo)))
+                using (var response = await httpClient.PutAsync($"{Constantes.TokaWebApi.PersonasFisicas}/{modelo.IdPersonaFisica}", new JsonContent(modelo)))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
@@ -116,7 +115,7 @@ namespace Toka.WebApp.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}/{id}"))
+                using (var response = await httpClient.GetAsync($"{Constantes.TokaWebApi.PersonasFisicas}/{id}"))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -132,7 +131,7 @@ namespace Toka.WebApp.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.DeleteAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}/{modelo.IdPersonaFisica}"))
+                using (var response = await httpClient.DeleteAsync($"{Constantes.TokaWebApi.PersonasFisicas}/{modelo.IdPersonaFisica}"))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
@@ -154,7 +153,7 @@ namespace Toka.WebApp.Controllers
             List<PersonasFisicas> personasList = new();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{CONSTANTES.URL_BASE_TOKA_WEB_API}{ACCION_WEB_API}"))
+                using (var response = await httpClient.GetAsync($"{Constantes.TokaWebApi.PersonasFisicas}"))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
 
@@ -162,13 +161,7 @@ namespace Toka.WebApp.Controllers
                         personasList = JsonConvert.DeserializeObject<List<PersonasFisicas>>(responseText);
                 }
             }
-            return PartialView(CONSTANTES.VISTA_PARCIAL_TABLA_PERSONAS, personasList);
+            return PartialView(Constantes.VistaParcial.TablaPersonas, personasList);
         }
-    }
-    public class JsonContent : StringContent
-    {
-        public JsonContent(object obj) :
-            base(JsonConvert.SerializeObject(obj), System.Text.Encoding.UTF8, "application/json")
-        { }
     }
 }
