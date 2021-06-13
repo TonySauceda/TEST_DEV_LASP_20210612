@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Toka.Core.Models
 {
-    public class Resultado
+    public abstract class Resultado
     {
         public int Error { get; set; }
         public string MensajeError { get; set; }

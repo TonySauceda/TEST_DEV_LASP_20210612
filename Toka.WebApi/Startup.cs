@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Toka.DataAccess;
+using Toka.DataAccess.Services;
 
 namespace Toka.WebApi
 {
@@ -32,6 +33,9 @@ namespace Toka.WebApi
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TokaConnection"));
             });
+
+            services.AddScoped<IPersonaFisicaService, PersonaFisicaService>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

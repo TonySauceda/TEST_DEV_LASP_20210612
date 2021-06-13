@@ -40,16 +40,16 @@ namespace Toka.WebApp.Controllers
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode != System.Net.HttpStatusCode.Created)
                     {
-                        var error = JsonConvert.DeserializeObject<Resultado>(responseText);
+                        var error = JsonConvert.DeserializeObject<AgregarPersonaFisicaResult>(responseText);
                         ViewBag.Mensaje = error.MensajeError;
                         return View(modelo);
                     }
 
                     var persona = JsonConvert.DeserializeObject<PersonasFisicas>(responseText);
+
+                    return RedirectToAction("Detalle", new { Id = persona.IdPersonaFisica });
                 }
             }
-
-            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Detalle(int id)
@@ -99,7 +99,7 @@ namespace Toka.WebApp.Controllers
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
                     {
-                        var error = JsonConvert.DeserializeObject<Resultado>(responseText);
+                        var error = JsonConvert.DeserializeObject<ActualizarPersonaFisicaResult>(responseText);
                         ViewBag.Mensaje = error.MensajeError;
                         return View(modelo);
                     }
@@ -137,7 +137,7 @@ namespace Toka.WebApp.Controllers
                     string responseText = await response.Content.ReadAsStringAsync();
                     if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
                     {
-                        var error = JsonConvert.DeserializeObject<Resultado>(responseText);
+                        var error = JsonConvert.DeserializeObject<EliminarPersonaFisicaResult>(responseText);
                         ViewBag.Mensaje = error.MensajeError;
                         return View(modelo);
                     }

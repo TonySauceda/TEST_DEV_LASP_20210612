@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Toka.Core.Models;
 using Toka.DataAccess;
+using Toka.DataAccess.Services;
 
 namespace Toka.WebApi.Controllers
 {
@@ -15,23 +16,23 @@ namespace Toka.WebApi.Controllers
     [ApiController]
     public class PersonasFisicasController : ControllerBase
     {
-        private readonly TokaContext _context;
+        private readonly IPersonaFisicaService _personaFisicaService;
 
-        public PersonasFisicasController(TokaContext context)
+        public PersonasFisicasController(IPersonaFisicaService personaFisicaService)
         {
-            _context = context;
+            _personaFisicaService = personaFisicaService;
         }
 
         [HttpGet]
-        public IEnumerable<PersonasFisicas> Get()
+        public async Task<IEnumerable<PersonasFisicas>> Get()
         {
-            return _context.PersonasFisicas.Where(x => x.Activo).ToList();
+            return await _personaFisicaService.ObtenerListaPersonasAsync();
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var personaFisica = _context.PersonasFisicas.Where(x => x.Activo && x.IdPersonaFisica == id).FirstOrDefault();
+            var personaFisica = await _personaFisicaService.ObtenerPersonaPorIdAsync(id);
 
             if (personaFisica == null)
                 return NotFound();
@@ -40,33 +41,29 @@ namespace Toka.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(PersonasFisicas model)
+        public async Task<IActionResult> Post(PersonasFisicas model)
         {
-            var parms = ObtenerParametros(model);
-
-            string query = "EXEC dbo.sp_AgregarPersonaFisica @Nombre,@ApellidoPaterno,@ApellidoMaterno,@RFC,@FechaNacimiento,@UsuarioAgrega";
-            var resultado = _context.Resultado.FromSqlRaw(query, parms).ToList().First();
+            var resultado = await _personaFisicaService.AgregarPersonaFisicaAsync(model);
 
             if (resultado.EsError)
                 return BadRequest(resultado);
 
             var personaUri = $"{Request.Scheme}://{Request.Host.Value}{Request.Path}/{resultado.Error}";
-            var persona = _context.PersonasFisicas.Find(resultado.Error);
+            var persona = await _personaFisicaService.ObtenerPersonaPorIdAsync(resultado.Error);
             return Created(personaUri, persona);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, PersonasFisicas model)
+        public async Task<IActionResult> Put(int id, PersonasFisicas model)
         {
             if (model.IdPersonaFisica == 0)
                 model.IdPersonaFisica = id;
 
             if (model.IdPersonaFisica != id)
-                return BadRequest(new Resultado() { Error = -1, MensajeError = "Error al procesar la información" });
+                return BadRequest(new ActualizarPersonaFisicaResult { Error = -1, MensajeError = "Error al procesar la información" });
 
-            var parms = ObtenerParametros(model, true);
-            string query = "EXEC dbo.sp_ActualizarPersonaFisica @IdPersonaFisica,@Nombre,@ApellidoPaterno,@ApellidoMaterno,@RFC,@FechaNacimiento,@UsuarioAgrega";
-            var resultado = _context.Resultado.FromSqlRaw(query, parms).ToList().First();
+
+            var resultado = await _personaFisicaService.ActualizarPersonaFisicaAsync(model);
 
             if (resultado.EsError)
                 return BadRequest(resultado);
@@ -75,43 +72,23 @@ namespace Toka.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
                 return BadRequest();
 
-            var persona = _context.PersonasFisicas.Find(id);
+            var persona = await _personaFisicaService.ObtenerPersonaPorIdAsync(id);
 
             if (persona == null)
                 return NotFound();
 
-            string query = "EXEC dbo.sp_EliminarPersonaFisica @IdPersonaFisica";
-            var parms = new SqlParameter[] { new SqlParameter { ParameterName = "@IdPersonaFisica", Value = id } };
-            var resultado = _context.Resultado.FromSqlRaw(query, parms).ToList().First();
+
+            var resultado = await _personaFisicaService.EliminarPersonaFisicaAsync(id);
 
             if (resultado.EsError)
                 return BadRequest(resultado);
 
             return NoContent();
-        }
-
-        [NonAction]
-        private SqlParameter[] ObtenerParametros(PersonasFisicas model, bool modificar = false)
-        {
-            List<SqlParameter> resultado = new List<SqlParameter>
-                {
-                    new SqlParameter { ParameterName = "@Nombre", Value = model.Nombre },
-                    new SqlParameter { ParameterName = "@ApellidoPaterno", Value = model.ApellidoPaterno },
-                    new SqlParameter { ParameterName = "@ApellidoMaterno", Value = model.ApellidoMaterno },
-                    new SqlParameter { ParameterName = "@RFC", Value = model.RFC },
-                    new SqlParameter { ParameterName = "@FechaNacimiento", Value = model.FechaNacimiento },
-                    new SqlParameter { ParameterName = "@UsuarioAgrega", Value = model.UsuarioAgrega }
-                };
-
-            if (modificar)
-                resultado.Add(new SqlParameter { ParameterName = "@IdPersonaFisica", Value = model.IdPersonaFisica });
-
-            return resultado.ToArray();
         }
     }
 }

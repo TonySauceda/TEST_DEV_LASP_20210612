@@ -16,11 +16,15 @@ namespace Toka.DataAccess
         }
 
         public DbSet<PersonasFisicas> PersonasFisicas { get; set; }
-        public DbSet<Resultado> Resultado { get; set; }
+        public DbSet<EliminarPersonaFisicaResult> EliminarPersonaFisicaResult { get; set; }
+        public DbSet<AgregarPersonaFisicaResult> AgregarPersonaFisicaResult { get; set; }
+        public DbSet<ActualizarPersonaFisicaResult> ActualizarPersonaFisicaResult { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Resultado>(e => e.HasNoKey());
+            modelBuilder.Entity<EliminarPersonaFisicaResult>(e => e.HasNoKey());
+            modelBuilder.Entity<AgregarPersonaFisicaResult>(e => e.HasNoKey());
+            modelBuilder.Entity<ActualizarPersonaFisicaResult>(e => e.HasNoKey());
         }
     }
 }
