@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toka.Core", "Toka.Core\Toka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toka.DataAccess", "Toka.DataAccess\Toka.DataAccess.csproj", "{CB1B131E-616D-4BD3-9543-FB9A4170F337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toka.WebApp", "Toka.WebApp\Toka.WebApp.csproj", "{7D23D646-140C-478C-B09C-58576B9A0CE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toka.WebApp", "Toka.WebApp\Toka.WebApp.csproj", "{7D23D646-140C-478C-B09C-58576B9A0CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
