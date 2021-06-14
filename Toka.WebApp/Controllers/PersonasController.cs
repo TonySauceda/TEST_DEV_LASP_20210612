@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Toka.Core.Models;
 using Toka.WebApp.Utils;
 
 namespace Toka.WebApp.Controllers
 {
+    [Authorize]
     public class PersonasController : Controller
     {
         public IActionResult Index()
@@ -34,6 +38,8 @@ namespace Toka.WebApp.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                var token = ((ClaimsIdentity)User.Identity).FindFirst("Token").Value;
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 using (var response = await httpClient.PostAsync($"{Constantes.TokaWebApi.PersonasFisicas}", new JsonContent(modelo)))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();
@@ -153,6 +159,9 @@ namespace Toka.WebApp.Controllers
             List<PersonasFisicas> personasList = new();
             using (var httpClient = new HttpClient())
             {
+                var token = ((ClaimsIdentity)User.Identity).FindFirst("Token").Value;
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 using (var response = await httpClient.GetAsync($"{Constantes.TokaWebApi.PersonasFisicas}"))
                 {
                     string responseText = await response.Content.ReadAsStringAsync();

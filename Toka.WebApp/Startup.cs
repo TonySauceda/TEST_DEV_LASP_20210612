@@ -35,6 +35,8 @@ namespace Toka.WebApp
             services.AddAuthentication(Constantes.Identity.TokaAuth).AddCookie(Constantes.Identity.TokaAuth, o =>
             {
                 o.Cookie.Name = Constantes.Identity.TokaAuth;
+                o.LoginPath = "/Usuarios/Login";
+                o.LogoutPath = "/Usuarios/Logout";
             });
         }
 

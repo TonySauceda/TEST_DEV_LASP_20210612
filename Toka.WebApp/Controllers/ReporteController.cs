@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -13,6 +14,7 @@ using Toka.WebApp.Utils;
 
 namespace Toka.WebApp.Controllers
 {
+    [Authorize]
     public class ReporteController : Controller
     {
         public static string Token = "";
