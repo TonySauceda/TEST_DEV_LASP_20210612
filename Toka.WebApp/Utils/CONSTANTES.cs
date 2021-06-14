@@ -11,7 +11,8 @@ namespace Toka.WebApp.Utils
         {
             public const string Base = "https://localhost:44397/api";
             public static readonly string PersonasFisicas = $"{Base}/PersonasFisicas";
-            //public const string TokaCandidatoApi = "https://api.toka.com.mx/candidato/api";
+            public static readonly string Registrar = $"{Base}/Usuario/Registrar";
+            public static readonly string Login = $"{Base}/Usuario/Login";
         }
         public class CandidatoApi
         {
@@ -29,6 +30,12 @@ namespace Toka.WebApp.Utils
         {
             public const string TablaPersonas = "~/Views/Shared/_TablaPersonasPartial.cshtml";
             public const string TablaReporte = "~/Views/Shared/_TablaReportePartial.cshtml";
+            public const string LoginStatus = "~/Views/Shared/_LoginStatusPartial.cshtml";
+        }
+
+        public class Identity
+        {
+            public const string TokaAuth = "TokaAuth";
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Toka.Core.Models;
+using Toka.Core.Models.Responses;
 using Toka.DataAccess.Services;
 using Toka.WebApi.Configuration;
 
@@ -68,12 +69,12 @@ namespace Toka.WebApi.Controllers
             var usuario = await _usuariosService.ObtenerUsuarioPorUsuarioAsync(model.Usuario);
 
             if (usuario == null)
-                return BadRequest(new { Mensaje = "No existe el usuario" });
+                return BadRequest(new ErrorResponse { Mensaje = "No existe el usuario" });
 
             var contraseñaValida = BCrypt.Net.BCrypt.Verify(model.Contraseña, usuario.Contraseña);
 
-            if(!contraseñaValida)
-                return BadRequest(new { Mensaje = "Contraseña inválida" });
+            if (!contraseñaValida)
+                return BadRequest(new ErrorResponse { Mensaje = "Contraseña inválida" });
 
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -91,7 +92,14 @@ namespace Toka.WebApi.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new { usuario.IdUsuario, usuario.Usuario, token = tokenHandler.WriteToken(token) });
+            var respuesta = new LoginSuccessResponse
+            {
+                IdUsuario = usuario.IdUsuario,
+                Usuario = usuario.Usuario,
+                Token = tokenHandler.WriteToken(token)
+            };
+
+            return Ok(respuesta);
         }
     }
 }

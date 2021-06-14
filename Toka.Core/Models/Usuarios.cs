@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Toka.Core.Models
@@ -12,7 +11,7 @@ namespace Toka.Core.Models
     [Table("Tb_Usuarios")]
     public class Usuarios
     {
-        [key]
+        [Key]
         public int IdUsuario { get; set; }
         [Required(ErrorMessage = "El usuario es requerido")]
         [StringLength(50)]

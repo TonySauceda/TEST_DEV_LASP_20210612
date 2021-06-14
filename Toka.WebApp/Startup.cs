@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Toka.WebApp.Configuration;
+using Toka.WebApp.Utils;
 
 namespace Toka.WebApp
 {
@@ -30,6 +31,11 @@ namespace Toka.WebApp
             services.AddSingleton(candidatoApiSettings);
 
             services.AddControllersWithViews();
+
+            services.AddAuthentication(Constantes.Identity.TokaAuth).AddCookie(Constantes.Identity.TokaAuth, o =>
+            {
+                o.Cookie.Name = Constantes.Identity.TokaAuth;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +56,7 @@ namespace Toka.WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
